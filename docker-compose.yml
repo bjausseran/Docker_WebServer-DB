@@ -1,17 +1,25 @@
 version: '3'
-
 services:
-  mysqldb:
-      image: mysql:5.7
-      restart: always
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: db
+  web:
+    image: praqma/network-multitool
+    container_name: web
+    command: sleep infinity
+    networks:
+      - frontend
+      - backend
+  app:
+    image: praqma/network-multitool
+    container_name: app
+    command: sleep infinity
+    networks:
+      - backend
+  db:
+    image: praqma/network-multitool
+    container_name: db
+    command: sleep infinity
+    networks:
+      - frontend
 
-  phpmyadmin:
-      image: phpmyadmin/phpmyadmin
-      restart: always
-      ports:
-      - 8080:80
-      environment:
-        PMA_HOST: mysqldb
+networks:
+  frontend:
+  backend:

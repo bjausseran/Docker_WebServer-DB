@@ -1,4 +1,4 @@
-# Docker_WebServer-DB
+# Docker_WebServer-DB  
 
 4.  
     a. Récupérer l'image sur le Docker Hub :  
@@ -66,7 +66,7 @@
 
 8.
     On crée un docker-compose.yml basique : 
-            `version: '3'
+            `version: '3'  
 
             services:
             mysqldb:
@@ -82,9 +82,9 @@
                 - 8080:80
                 environment:
                     PMA_HOST: mysqldb`
-                    
-        Puis :  `docker compose build`
-                `docker compose up`
+
+    Puis :  `docker compose build`
+            `docker compose up`
 
     a.  Cela permet de monter plusieur container d'un coup sans avoir à taper une série de commandes avec beaucoup d'options.
 
@@ -95,10 +95,49 @@
                         MYSQL_DATABASE: database`
 
 
+9.
+    On crée un docker-compose.yml : 
+            `version: '3'
+            services:
+            web:
+                image: praqma/network-multitool
+                container_name: web
+                command: sleep infinity
+                networks:
+                - frontend
+                - backend
+            app:
+                image: praqma/network-multitool
+                container_name: app
+                command: sleep infinity
+                networks:
+                - backend
+            db:
+                image: praqma/network-multitool
+                container_name: db
+                command: sleep
+                networks:
+                - frontend
 
+            networks:
+            frontend:
+            backend:`
+                    
+    Puis :  `docker compose build`
+            `docker compose up`
 
-        
+    b.  A l'aide de ces commandes : 
+        La ligne Gateway ou bien IpAddress, ou plus directement on peut faire :
+        `docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}, {{end}}' db`
+        Retour :    `172.22.0.1,`
+        `docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}, {{end}}' app`
+        Retour :    `172.23.0.1,`
+        `docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}, {{end}}' web`
+        Retour :    `172.23.0.1, 172.22.0.1,`
 
+        On voit que db n'est pas sur le même reseau que app, et que web est sur les deux.
+    
+    c.  Cela permet de limiter la connexion entre les différents services, ce qui permet de renforcer la sécurité et d'isoler les services. Isoler les services permets d'en    maintenir debout lorsque une partie de l'infra tombe.
 
     
 
