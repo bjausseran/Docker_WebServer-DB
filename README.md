@@ -80,6 +80,7 @@ Je vérifier ici : `http://localhost:8080`
 	
 ### b.
 **MySQL** :
+	
 	docker run -d --name mysqldb -e MYSQL_ROOT_PASSWORD=password mysql:5.7
 	
 - Le server MySQL ne s'était pas lancé automatiquement, j'ai fait : `mysql -u root -p` dans le container.
